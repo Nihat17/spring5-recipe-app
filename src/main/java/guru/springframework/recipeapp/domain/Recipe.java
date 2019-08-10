@@ -1,6 +1,7 @@
 package guru.springframework.recipeapp.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -25,6 +26,16 @@ public class Recipe {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
+
+    /*
+        owning side is Ingredient but the relation is bidirectional
+        we only add cascade here because we don't want a recipe to be deleted
+        if we delete an ingredient from database, if we delete recipe then Ingredient
+        will be deleted due to cascade
+     */
 
     public Notes getNotes() {
         return notes;
