@@ -17,7 +17,6 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    // private Difficulty difficulty;
 
     @Lob
     private Byte[] image;
@@ -36,6 +35,25 @@ public class Recipe {
         if we delete an ingredient from database, if we delete recipe then Ingredient
         will be deleted due to cascade
      */
+
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
     public Notes getNotes() {
         return notes;
