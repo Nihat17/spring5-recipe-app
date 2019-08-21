@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Guacamole</title>
+</head>
+<body>
+    <h2>
+        Recipe of Guacamole
+    </h2>
+
+    <table>
+        <tr>
+            <th>Ingredient Description</th>
+            <th>Amount</th>
+            <th>Unit of measure</th>
+        </tr>
+
+        <tr th:each="ingredient : ${recipe.getIngredients()}">
+            <td th:text="${ingredient.getDescription()}"></td>
+            <td th:text="${ingredient.getAmount()}"></td>
+            <td th:text="${ingredient.getUom().getDescription()}"></td>
+        </tr>
+
+    </table>
+
+</body>
+</html>

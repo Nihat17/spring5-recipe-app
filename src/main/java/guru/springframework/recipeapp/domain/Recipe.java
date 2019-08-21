@@ -19,7 +19,7 @@ public class Recipe {
     private String directions;
     // private Difficulty difficulty;
 
-    @Lob
+    @Lob   // Large object
     private Byte[] image;
 
     // add Note one to one relation
