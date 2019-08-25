@@ -60,5 +60,4 @@ public class Recipe {
         this.notes = notes;
         notes.setRecipe(this);
     }
-
 }
