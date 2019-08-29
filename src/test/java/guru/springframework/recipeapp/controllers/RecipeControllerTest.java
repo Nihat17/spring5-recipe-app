@@ -32,7 +32,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void showByIdTestMockMvc() throws Exception {
+    public void showByIdTest() throws Exception {
 
         Recipe recipe = new Recipe();
         recipe.setId(1L);
