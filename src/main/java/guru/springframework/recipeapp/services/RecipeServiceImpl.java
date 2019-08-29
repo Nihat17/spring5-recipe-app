@@ -1,6 +1,5 @@
 package guru.springframework.recipeapp.services;
 
-import guru.springframework.recipeapp.bootstrap.RecipeBootstrap;
 import guru.springframework.recipeapp.domain.Recipe;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -29,5 +29,16 @@ public class RecipeServiceImpl implements RecipeService {
 
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet ::add);
         return recipeSet;
+    }
+
+    @Override
+    public Recipe findById(Long id) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+
+        if(!optionalRecipe.isPresent()) {
+            throw new RuntimeException("Recipe isn't present");
+        }
+
+        return optionalRecipe.get();
     }
 }

@@ -60,7 +60,7 @@ public class IndexControllersTest {
 
         ArgumentCaptor<Set<Recipe>> captor = ArgumentCaptor.forClass(Set.class);
 
-        String viewName = controllers.getIndexPage(model);
+            String viewName = controllers.getIndexPage(model);
 
         assertEquals("index", viewName);
         verify(recipeService, times(1)).getRecipes();
