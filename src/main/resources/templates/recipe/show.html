@@ -17,13 +17,13 @@
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
+<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="pannel-group">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                         <h1 class="panel-title" th:text="${recipe.description}">Recipe Description Here!</h1>
                     </div>
                     <div class="panel-body">
@@ -35,7 +35,6 @@
                                 <ul>
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
-                                    <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                     <li th:each="category : ${recipe.categories}" th:text="${category.getDescription()}"> cat three</li>
                                 </ul>
                             </div>
@@ -45,14 +44,12 @@
                                 <h5>Prep Time:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.prepTime + ' ' + 'min'}">30 min</p>
                             </div>
                             <div class="col-md-3">
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.difficulty}">Easy</p>
                             </div>
                         </div>
@@ -61,14 +58,12 @@
                                 <h5>Cooktime:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.cookTime + ' ' + 'min'}">30 min</p>
                             </div>
                             <div class="col-md-3">
                                 <h5>Servings:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.servings}">4</p>
                             </div>
                         </div>
@@ -77,14 +72,12 @@
                                 <h5>Source:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.source}">30 min</p>
                             </div>
                             <div class="col-md-3">
                                 <h5>URL:</h5>
                             </div>
                             <div class="col-md-3">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.url}">http://www.example.com</p>
                             </div>
                         </div>
@@ -100,7 +93,6 @@
                                 <ul>
                                     <li th:remove="all"> 1 teaspoon of sugar</li>
                                     <li th:remove="all"> 2 tablespoon of salt</li>
-                                    <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                     <li th:each="ingredient : ${recipe.ingredients}"
                                         th:text="${ingredient.amount +  ' ' +ingredient.uom.description
                                         + ' - ' + ingredient.description}">1 Cup of milk</li>
@@ -116,7 +108,6 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.directions}">Direction</p>
                             </div>
                         </div>
@@ -129,7 +120,6 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <p th:text="${recipe.notes.recipeNotes}">sit amet adipiscing sem neque sed ipsum.</p>
                             </div>
                         </div>
