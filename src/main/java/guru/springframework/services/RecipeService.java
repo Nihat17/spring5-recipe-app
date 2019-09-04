@@ -1,6 +1,7 @@
 package guru.springframework.services;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
 
 import java.util.Set;
