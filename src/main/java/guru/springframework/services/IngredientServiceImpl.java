@@ -35,22 +35,13 @@ public class IngredientServiceImpl implements IngredientService {
 
         Recipe recipe = recipeOptional.get();
 
-        IngredientCommand command = new IngredientCommand();
-
-        for(Ingredient ingredient : recipe.getIngredients()){
-            if(ingredient.getId() == ingredientId){
-                command = toIngredientCommand.convert(ingredient);
-            }
-        }
-
-        /*Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
+        Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
                 .map(ingredient -> toIngredientCommand.convert(ingredient)).findFirst();
 
         if(!ingredientCommandOptional.isPresent()){
             log.debug("Ingredient isn't present, ingredient id: " + ingredientId);
         }
-        return ingredientCommandOptional.get(); */
-        return command;
+        return ingredientCommandOptional.get();
     }
 }
