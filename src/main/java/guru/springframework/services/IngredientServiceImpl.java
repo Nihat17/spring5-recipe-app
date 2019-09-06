@@ -2,6 +2,7 @@ package guru.springframework.services;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.converters.IngredientToIngredientCommand;
+import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class IngredientServiceImpl implements IngredientService {
         this.toIngredientCommand = toIngredientCommand;
     }
 
+
     @Override
     public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
 
@@ -33,14 +35,22 @@ public class IngredientServiceImpl implements IngredientService {
 
         Recipe recipe = recipeOptional.get();
 
-        Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
+        IngredientCommand command = new IngredientCommand();
+
+        for(Ingredient ingredient : recipe.getIngredients()){
+            if(ingredient.getId() == ingredientId){
+                command = toIngredientCommand.convert(ingredient);
+            }
+        }
+
+        /*Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
                 .map(ingredient -> toIngredientCommand.convert(ingredient)).findFirst();
 
         if(!ingredientCommandOptional.isPresent()){
             log.debug("Ingredient isn't present, ingredient id: " + ingredientId);
         }
-
-        return ingredientCommandOptional.get();
+        return ingredientCommandOptional.get(); */
+        return command;
     }
 }

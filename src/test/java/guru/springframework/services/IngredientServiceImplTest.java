@@ -2,6 +2,7 @@ package guru.springframework.services;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.converters.IngredientToIngredientCommand;
+import guru.springframework.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
@@ -21,11 +22,14 @@ public class IngredientServiceImplTest {
 
     IngredientServiceImpl ingredientService;
 
+    private final IngredientToIngredientCommand toIngredientCommand;
+
     @Mock
     RecipeRepository recipeRepository;
 
-    @Mock
-    IngredientToIngredientCommand toIngredientCommand;
+    public IngredientServiceImplTest() {
+        this.toIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -40,15 +44,14 @@ public class IngredientServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
-        Ingredient ingredient;
-        ingredient = new Ingredient();
+        Ingredient ingredient = new Ingredient();
         ingredient.setId(1L);
 
         Ingredient ingredient2 = new Ingredient();
-        ingredient.setId(2L);
+        ingredient2.setId(2L);
 
         Ingredient ingredient3 = new Ingredient();
-        ingredient.setId(3L);
+        ingredient3.setId(3L);
 
         recipe.addIngredient(ingredient);
         recipe.addIngredient(ingredient2);
@@ -66,6 +69,5 @@ public class IngredientServiceImplTest {
         assertEquals(Long.valueOf(2), returnedValue.getId());
         assertEquals(Long.valueOf(1), returnedValue.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyLong());
-        verify(ingredientService, times(1)).findByRecipeIdAndIngredientId(anyLong(), anyLong());
     }
 }

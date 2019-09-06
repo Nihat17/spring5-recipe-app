@@ -76,7 +76,6 @@ public class RecipeServiceImplTest {
     @Test
     public void findRecipeCommandByIdTest(){
 
-
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
