@@ -116,7 +116,6 @@ public class IngredientControllerTest {
 
         when(ingredientService.updateIngredient(anyObject())).thenReturn(command);
 
-
         mockMvc.perform(post("/recipe/1/ingredient")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1"))
