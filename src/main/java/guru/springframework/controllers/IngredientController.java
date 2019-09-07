@@ -1,14 +1,15 @@
 package guru.springframework.controllers;
 
+import guru.springframework.commands.IngredientCommand;
+import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.repositories.UnitOfMeasureRepository;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -40,5 +41,23 @@ public class IngredientController {
                 Long.valueOf(recipeId), Long.valueOf(ingredientId)));
 
         return "/recipe/ingredient/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
+    public String updateIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model){
+        model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(
+                Long.valueOf(recipeId), Long.valueOf(ingredientId)));
+        model.addAttribute("uomList", ingredientService.getListUom());
+
+        return "/recipe/ingredient/ingredientform";
+    }
+
+    @PostMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient")
+    public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand command, Model model){
+        command.setRecipeId(Long.valueOf(recipeId));
+        model.addAttribute("ingredient", ingredientService.updateIngredient(command));
+        return "redirect:/recipe/" + command.getRecipeId() + "/ingredient/" + command.getId() + "/show";
     }
 }
