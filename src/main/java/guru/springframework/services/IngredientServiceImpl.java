@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -100,12 +102,11 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Set<UnitOfMeasure> getListUom() {
-        Set<UnitOfMeasure> uomList = new HashSet<>();
+    public Set<UnitOfMeasureCommand> getListUom() {
 
-        uomRepository.findAll().iterator().forEachRemaining(uomList::add);
-
-        uomList.forEach(uom -> toUnitOfMeasureCommand.convert(uom));
-        return uomList;
+        return StreamSupport.stream(uomRepository.findAll()
+                .spliterator(), false)
+                .map(toUnitOfMeasureCommand :: convert)
+                .collect(Collectors.toSet());
     }
 }
