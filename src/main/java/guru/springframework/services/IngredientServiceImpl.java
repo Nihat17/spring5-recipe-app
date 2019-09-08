@@ -66,7 +66,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Transactional
     @Override
-    public IngredientCommand updateIngredient(IngredientCommand ingredientCommand) {
+    public IngredientCommand saveOrUpdateIngredient(IngredientCommand ingredientCommand) {
 
         Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
 
@@ -88,7 +88,9 @@ public class IngredientServiceImpl implements IngredientService {
                         .orElseThrow(() -> new RuntimeException("UOM not found")));
             }
             else{
-                recipe.addIngredient(toIngredient.convert(ingredientCommand));
+                Ingredient ingredient = toIngredient.convert(ingredientCommand);
+                ingredient.setRecipe(recipe);
+                recipe.addIngredient(ingredient);
             }
         }
         else{
@@ -96,9 +98,18 @@ public class IngredientServiceImpl implements IngredientService {
             return new IngredientCommand();
         }
 
-        return recipeRepository.save(recipe).getIngredients().stream()
-                .filter(ing -> ing.getId().equals(ingredientCommand.getId()))
-                .map(ing -> toIngredientCommand.convert(ing)).findFirst().get();
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients()
+                .stream().filter(ing -> ing.getId().equals(ingredientCommand.getId())).findFirst();
+
+        if(!savedIngredientOptional.isPresent()){
+            savedIngredientOptional = savedRecipe.getIngredients().stream()
+                    .filter(ing -> ing.getDescription().equals(ingredientCommand.getDescription()))
+                    .filter(ing -> ing.getUom().getId().equals(ingredientCommand.getUom().getId()))
+                    .filter(ing -> ing.getAmount().equals(ingredientCommand.getAmount())).findFirst();
+        }
+
+        return toIngredientCommand.convert(savedIngredientOptional.get());
     }
 
     @Override

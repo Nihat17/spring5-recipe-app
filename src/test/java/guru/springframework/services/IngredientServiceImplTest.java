@@ -128,7 +128,7 @@ public class IngredientServiceImplTest {
 
         ingredientCommand.setUom(uom);
         //WHEN
-        IngredientCommand returnedValue = ingredientService.updateIngredient(ingredientCommand);
+        IngredientCommand returnedValue = ingredientService.saveOrUpdateIngredient(ingredientCommand);
 
         //THEN
         assertNotNull(returnedValue);

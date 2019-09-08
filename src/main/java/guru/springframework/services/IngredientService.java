@@ -9,6 +9,6 @@ import java.util.Set;
 public interface IngredientService {
 
     IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
-    IngredientCommand updateIngredient(IngredientCommand ingredientCommand);
+    IngredientCommand saveOrUpdateIngredient(IngredientCommand ingredientCommand);
     Set<UnitOfMeasureCommand> getListUom();
 }

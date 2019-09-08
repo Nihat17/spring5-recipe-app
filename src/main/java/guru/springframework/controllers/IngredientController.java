@@ -1,6 +1,8 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import guru.springframework.services.IngredientService;
@@ -57,7 +59,32 @@ public class IngredientController {
     @RequestMapping("/recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand command, Model model){
         command.setRecipeId(Long.valueOf(recipeId));
-        model.addAttribute("ingredient", ingredientService.updateIngredient(command));
-        return "redirect:/recipe/" + command.getRecipeId() + "/ingredient/" + command.getId() + "/show";
+        IngredientCommand ingredientCommand = ingredientService.saveOrUpdateIngredient(command);
+        model.addAttribute("ingredient", ingredientCommand);
+
+        return "redirect:/recipe/" + ingredientCommand.getRecipeId() + "/ingredient/" +
+                ingredientCommand.getId() + "/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String createIngredient(@PathVariable String recipeId, Model model){
+
+        RecipeCommand recipeCommand = recipeService.findRecipeCommandById(Long.valueOf(recipeId));
+
+        if(recipeCommand != null) {
+
+            IngredientCommand command = new IngredientCommand();
+            command.setRecipeId(Long.valueOf(recipeId));
+
+            command.setUom(new UnitOfMeasureCommand());
+
+            model.addAttribute("uomList", ingredientService.getListUom());
+            model.addAttribute("ingredient", command);
+        }
+        else{
+            throw new RuntimeException("Recipe with id " + recipeId + " isn't present in database.");
+        }
+        return "/recipe/ingredient/ingredientform";
     }
 }
