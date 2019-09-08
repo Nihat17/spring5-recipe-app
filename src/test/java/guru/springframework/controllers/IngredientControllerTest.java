@@ -6,6 +6,7 @@ import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
+import guru.springframework.services.UnitOfMeasureServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,6 +32,9 @@ public class IngredientControllerTest {
     @Mock
     IngredientService ingredientService;
 
+    @Mock
+    UnitOfMeasureServiceImpl unitOfMeasureService;
+
     IngredientController controller;
 
     MockMvc mockMvc;
@@ -39,7 +43,7 @@ public class IngredientControllerTest {
     public void setUp() throws Exception{
         MockitoAnnotations.initMocks(this);
 
-        controller = new IngredientController(recipeService, ingredientService);
+        controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -93,7 +97,7 @@ public class IngredientControllerTest {
         uomList.add(command1);
         uomList.add(command2);
 
-        when(ingredientService.getListUom()).thenReturn(uomList);
+        when(unitOfMeasureService.getListUom()).thenReturn(uomList);
 
         //WHEN
         mockMvc.perform(get("/recipe/1/ingredient/1/update"))
@@ -104,7 +108,7 @@ public class IngredientControllerTest {
 
         //THEN
         verify(ingredientService, times(1)).findByRecipeIdAndIngredientId(anyLong(), anyLong());
-        verify(ingredientService, times(1)).getListUom();
+        verify(unitOfMeasureService, times(1)).getListUom();
     }
 
     @Test
@@ -138,7 +142,7 @@ public class IngredientControllerTest {
         uomList.add(uom1);
         uomList.add(uom2);
 
-        when(ingredientService.getListUom()).thenReturn(uomList);
+        when(unitOfMeasureService.getListUom()).thenReturn(uomList);
 
         mockMvc.perform(get("/recipe/1/ingredient/new")
                 .param("recipeId", "1"))
@@ -148,7 +152,21 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("uomList"));
 
         verify(recipeService, times(1)).findRecipeCommandById(anyLong());
-        verify(ingredientService, times(1)).getListUom();
+        verify(unitOfMeasureService, times(1)).getListUom();
+    }
+
+    @Test
+    public void testDeleteIngredient() throws Exception{
+
+        mockMvc.perform(get("/recipe/1/ingredient/1/delete")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("recipeId", "1")
+                .param("ingredientId", "1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/1/ingredients"));
+
+        verify(ingredientService, times(1))
+                .deleteById(1L, 1L);
     }
 
 }

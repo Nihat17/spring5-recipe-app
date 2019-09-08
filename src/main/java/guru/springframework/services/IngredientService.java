@@ -10,5 +10,5 @@ public interface IngredientService {
 
     IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
     IngredientCommand saveOrUpdateIngredient(IngredientCommand ingredientCommand);
-    Set<UnitOfMeasureCommand> getListUom();
+    void deleteById(Long recipeId, Long ingredientId);
 }

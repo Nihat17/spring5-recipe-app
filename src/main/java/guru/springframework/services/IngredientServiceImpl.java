@@ -1,6 +1,7 @@
 package guru.springframework.services;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
@@ -113,11 +114,29 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Set<UnitOfMeasureCommand> getListUom() {
+    public void deleteById(Long recipeId, Long ingredientId) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
-        return StreamSupport.stream(uomRepository.findAll()
-                .spliterator(), false)
-                .map(toUnitOfMeasureCommand :: convert)
-                .collect(Collectors.toSet());
+        if(recipeOptional.isPresent()){
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                    .filter(ing -> ing.getId().equals(ingredientId)).findFirst();
+
+            if(ingredientOptional.isPresent()){
+                Ingredient ingredient = ingredientOptional.get();
+
+                recipe.getIngredients().remove(ingredient);
+                ingredient.setRecipe(null);
+
+                recipeRepository.save(recipe);
+            }
+           else{
+               throw new RuntimeException("Ingredient with id " + ingredientId + " doesn't exist.");
+            }
+        }
+        else{
+            throw new RuntimeException("Recipe with id " + recipeId + " doesn't exist");
+        }
     }
 }

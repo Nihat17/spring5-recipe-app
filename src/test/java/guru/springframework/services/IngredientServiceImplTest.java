@@ -139,20 +139,31 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void testGetListUom(){
+    public void testDeleteById() throws Exception{
 
         //GIVEN
-        HashSet uomsData = new HashSet();
-        uomsData.add(new UnitOfMeasure());
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Ingredient ingredient1 = new Ingredient();
+        ingredient1.setId(1L);
+        ingredient1.setRecipe(recipe);
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setId(2L);
+        ingredient2.setRecipe(recipe);
 
-        when(unitOfMeasureRepository.findAll()).thenReturn(uomsData);
+        recipe.addIngredient(ingredient1);
+        recipe.addIngredient(ingredient2);
+
+        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
 
         //WHEN
-        HashSet returnedValue = (HashSet) ingredientService.getListUom();
+        ingredientService.deleteById(1L, 1L);
 
         //THEN
-        assertNotNull(returnedValue);
-        assertEquals(1, returnedValue.size());
-        verify(unitOfMeasureRepository, times(1)).findAll();
+        assertEquals(1, recipe.getIngredients().size());
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 }

@@ -3,10 +3,9 @@ package guru.springframework.controllers;
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.commands.UnitOfMeasureCommand;
-import guru.springframework.domain.UnitOfMeasure;
-import guru.springframework.repositories.UnitOfMeasureRepository;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
+import guru.springframework.services.UnitOfMeasureServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +18,15 @@ public class IngredientController {
 
     private RecipeService recipeService;
     private IngredientService ingredientService;
+    private UnitOfMeasureServiceImpl uomService;
 
     @Autowired
-    public IngredientController(RecipeService recipeService, IngredientService ingredientService) {
+    public IngredientController(RecipeService recipeService, IngredientService ingredientService,
+        UnitOfMeasureServiceImpl uomService) {
+
         this.recipeService = recipeService;
         this.ingredientService = ingredientService;
+        this.uomService = uomService;
     }
 
     @GetMapping
@@ -50,7 +53,7 @@ public class IngredientController {
     public String updateIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model){
         model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(
                 Long.valueOf(recipeId), Long.valueOf(ingredientId)));
-        model.addAttribute("uomList", ingredientService.getListUom());
+        model.addAttribute("uomList", uomService.getListUom());
 
         return "/recipe/ingredient/ingredientform";
     }
@@ -79,12 +82,20 @@ public class IngredientController {
 
             command.setUom(new UnitOfMeasureCommand());
 
-            model.addAttribute("uomList", ingredientService.getListUom());
+            model.addAttribute("uomList", uomService.getListUom());
             model.addAttribute("ingredient", command);
         }
         else{
             throw new RuntimeException("Recipe with id " + recipeId + " isn't present in database.");
         }
         return "/recipe/ingredient/ingredientform";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId){
+        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
+
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 }
