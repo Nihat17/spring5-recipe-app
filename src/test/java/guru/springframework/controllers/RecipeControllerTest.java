@@ -80,8 +80,6 @@ public class RecipeControllerTest {
     @Test
     public void testNewRecipe() throws Exception {
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
@@ -94,14 +92,13 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId(3L);
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "some string"))
+                .param("description", "some string")
+                .param("directions", "some direction"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/3/show"));
     }
