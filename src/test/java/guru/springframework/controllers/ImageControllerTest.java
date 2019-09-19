@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.domain.Recipe;
 import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
@@ -38,7 +39,9 @@ public class ImageControllerTest {
 
         imageController = new ImageController(recipeService, imageService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(imageController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -97,6 +100,15 @@ public class ImageControllerTest {
 
         //THEN
         assertEquals(s.getBytes().length, responseBytes.length);
+
+    }
+
+    @Test
+    public void testGetImageNumberFormatException() throws Exception{
+
+        mockMvc.perform(get("/recipe/ass/recipeimage"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
 
     }
 }
