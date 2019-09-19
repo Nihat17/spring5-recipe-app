@@ -75,7 +75,6 @@ public class RecipeController {
 
         log.error("Handling bad request exception");
         log.error(exception.getMessage());
-
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("400error");
