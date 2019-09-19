@@ -69,6 +69,13 @@ public class RecipeControllerTest {
     }
 
     @Test
+    public void testGetRecipeBadRequest() throws Exception{
+        mockMvc.perform(get("/recipe/ss/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+    }
+
+    @Test
     public void testNewRecipe() throws Exception {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
